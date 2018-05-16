@@ -26,7 +26,7 @@ import com.madlyai.domain.User;
 @EnableJpaRepositories(
         entityManagerFactoryRef="entityManagerFactorySecondary",
         transactionManagerRef="transactionManagerSecondary",
-        basePackages= { "com.itguang.springbootmultidatasource.repository.test2" })
+        basePackages= { "com.madlyai.repository.test2" })
 public class SecondaryConfig {
 
     @Autowired

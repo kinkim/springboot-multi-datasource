@@ -28,7 +28,7 @@ import com.madlyai.domain.User;
 @EnableJpaRepositories(
         entityManagerFactoryRef = "entityManagerFactoryPrimary",//配置连接工厂 entityManagerFactory
         transactionManagerRef = "transactionManagerPrimary", //配置 事物管理器  transactionManager
-        basePackages = {"com.itguang.springbootmultidatasource.repository.test1"}//设置dao（repo）所在位置
+        basePackages = {"com.madlyai.repository.test1"}//设置dao（repo）所在位置
 )
 public class PrimaryConfig {
 

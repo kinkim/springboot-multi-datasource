@@ -6,19 +6,19 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://rds.cqximo.com:3306/cloudoper?useUnicode=true&characterEncoding=UTF-8
     druid:
-      max-pool-prepared-statement-per-connection-size: 5
+      initial-size: 2
       min-idle: 2
-      validation-query-timeout: 1
       max-active: 30
+      max-wait: 60000
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      validation-query-timeout: 1
+      max-pool-prepared-statement-per-connection-size: 20
       test-while-idle: true
-      time-between-eviction-runs-millis: 10000
       validation-query: select 1
       aop-patterns: com.madlyai.repository.*
-      max-wait: 1234
       test-on-borrow: true
       pool-prepared-statements: true
-      initial-size: 2
-      min-evictable-idle-time-millis: 30001
       async-close-connection-enable: true
       test-on-return: true
       primary:
@@ -39,13 +39,14 @@ spring:
           slow-sql-millis: 2000
           log-slow-sql: true
   jpa:
-    showSql: true
-    generateDdl: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+        show_sql: true
+        format_sql: true
+        hbm2ddl:
+          auto: none
     hibernate:
-      show-sql: false
-      dialect: org.hibernate.dialect.MySQL5InnoDBDialect
-      format-sql: true
-      ddlAuto: none
       naming:
         implicitStrategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
         physicalStrategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy

@@ -1,8 +1,10 @@
 package com.madlyai.config;
 
 import javax.annotation.Resource;
+import javax.persistence.EntityManager;
 import javax.sql.DataSource;
 
+import com.madlyai.jpa.BasicRepositoryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateSettings;
@@ -27,6 +29,7 @@ import com.madlyai.domain.User;
 @EnableConfigurationProperties(JpaProperties.class)
 @EnableJpaRepositories(
         entityManagerFactoryRef = "entityManagerFactoryPrimary",//配置连接工厂 entityManagerFactory
+        repositoryFactoryBeanClass = BasicRepositoryFactory.class,
         transactionManagerRef = "transactionManagerPrimary", //配置 事物管理器  transactionManager
         basePackages = {"com.madlyai.repository.test1"}//设置dao（repo）所在位置
 )
@@ -38,12 +41,13 @@ public class PrimaryConfig {
     
     @Resource 
     private JpaProperties jpaProperties;
+
     /**
      *
      * @param builder
      * @return
      */
-    @Bean(name = "entityManagerFactoryPrimary")
+    @Bean(name ={ "entityManagerFactoryPrimary","entityManagerFactory"})
     @Primary
     public LocalContainerEntityManagerFactoryBean entityManagerFactoryPrimary(EntityManagerFactoryBuilder builder) {
     	HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
@@ -51,6 +55,7 @@ public class PrimaryConfig {
 		vendorAdapter.setShowSql(true);
 		LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
 		factoryBean.setDataSource(primaryDataSource);
+        factoryBean.setPersistenceUnitName("primary");
 		factoryBean.setJpaPropertyMap(jpaProperties.getHibernateProperties(new HibernateSettings()));
 		factoryBean.setJpaVendorAdapter(vendorAdapter);
 		factoryBean.setPackagesToScan(User.class.getPackage().getName());
@@ -68,6 +73,10 @@ public class PrimaryConfig {
     PlatformTransactionManager transactionManagerPrimary(EntityManagerFactoryBuilder builder) {
         return new JpaTransactionManager(entityManagerFactoryPrimary(builder).getObject());
     }
-
+    @Bean(name = "entityManagerPrimary")
+    @Primary
+    public EntityManager entityManager(EntityManagerFactoryBuilder builder) {
+        return entityManagerFactoryPrimary(builder).getObject().createEntityManager();
+    }
 
 }

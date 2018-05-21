@@ -4,6 +4,7 @@ import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.sql.DataSource;
 
+import com.madlyai.jpa.BasicRepositoryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateSettings;
@@ -25,6 +26,7 @@ import com.madlyai.domain.User;
 @EnableTransactionManagement
 @EnableJpaRepositories(
         entityManagerFactoryRef="entityManagerFactorySecondary",
+        repositoryFactoryBeanClass = BasicRepositoryFactory.class,
         transactionManagerRef="transactionManagerSecondary",
         basePackages= { "com.madlyai.repository.test2" })
 public class SecondaryConfig {
@@ -48,6 +50,7 @@ public class SecondaryConfig {
 		vendorAdapter.setShowSql(true);
 		LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
 		factoryBean.setDataSource(secondaryDataSource);
+		factoryBean.setPersistenceUnitName("secondary");
 		factoryBean.setJpaPropertyMap(jpaProperties.getHibernateProperties(new HibernateSettings()));
 		factoryBean.setJpaVendorAdapter(vendorAdapter);
 		factoryBean.setPackagesToScan(User.class.getPackage().getName());

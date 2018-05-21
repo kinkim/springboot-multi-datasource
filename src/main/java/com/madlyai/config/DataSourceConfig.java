@@ -1,7 +1,7 @@
 package com.madlyai.config;
 
-import javax.sql.DataSource;
-
+import com.alibaba.druid.pool.DruidDataSource;
+import com.madlyai.config.druid.*;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -14,13 +14,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
 
-import com.alibaba.druid.pool.DruidDataSource;
-import com.madlyai.config.druid.DruidDataSourceBuilder;
-import com.madlyai.config.druid.DruidFilterConfiguration;
-import com.madlyai.config.druid.DruidSpringAopConfiguration;
-import com.madlyai.config.druid.DruidStatProperties;
-import com.madlyai.config.druid.DruidStatViewServletConfiguration;
-import com.madlyai.config.druid.DruidWebStatFilterConfiguration;
+import javax.sql.DataSource;
 
 @Configuration
 @ConditionalOnClass(DruidDataSource.class)
@@ -57,7 +51,7 @@ public class DataSourceConfig {
         return DruidDataSourceBuilder.create().build();
     }
 
-    @Bean(name = "secondaryDataSource",initMethod = "init")
+   @Bean(name = "secondaryDataSource",initMethod = "init")
     @Qualifier("secondaryDataSource")
     @ConfigurationProperties(prefix = "spring.datasource.druid.secondary")
     public DataSource dataSourceTwo(){

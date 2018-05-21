@@ -1,28 +1,25 @@
 package com.madlyai.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
+@Table(name="user")
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false,name="user_name", unique = true)
     private String userName;
-    @Column(nullable = false)
+    @Column(nullable = false,name="pass_word")
     private String passWord;
     @Column(nullable = false, unique = true)
     private String email;
-    @Column( nullable = true, unique = true)
+    @Column( nullable = true,name="nick_name", unique = true)
     private String nickName;
-    @Column(nullable = false)
+    @Column(nullable = false,name = "reg_time")
     private String regTime;
 
     public User() {

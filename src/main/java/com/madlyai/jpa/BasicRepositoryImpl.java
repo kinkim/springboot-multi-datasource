@@ -1,22 +1,23 @@
 package com.madlyai.jpa;
 
+import org.hibernate.SQLQuery;
+import org.hibernate.query.NativeQuery;
+import org.hibernate.transform.ResultTransformer;
+import org.springframework.data.jpa.repository.support.JpaEntityInformation;
+import org.springframework.data.jpa.repository.support.JpaEntityInformationSupport;
+import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-
-import org.hibernate.query.NativeQuery;
-import org.hibernate.transform.ResultTransformer;
-import org.springframework.data.jpa.repository.support.JpaEntityInformation;
-import org.springframework.data.jpa.repository.support.JpaEntityInformationSupport;
-import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
-import org.springframework.data.repository.NoRepositoryBean;
-
-
+/**
+ * Created by Hone on 2016/8/26.
+ */
 public class BasicRepositoryImpl<T, ID extends Serializable> extends SimpleJpaRepository<T, ID> implements BasicRepository<T, ID> {
     private final EntityManager entityManager;
     private final Class<T> entityClass;
@@ -30,15 +31,13 @@ public class BasicRepositoryImpl<T, ID extends Serializable> extends SimpleJpaRe
     public BasicRepositoryImpl(Class<T> domainClass, EntityManager em) {
         this(JpaEntityInformationSupport.getEntityInformation(domainClass, em), em);
     }
-    
-	
-	@Override
+    @Override
     public List<T> queryEntityListBySql(String sql, Map<String, Object> params) {
         Query query = this.entityManager.createNativeQuery(sql, this.entityClass);
         setParameter(query, params);
         return query.getResultList();
     }
-	@Override
+    @Override
     public List<T> queryEntityListBySql(String sql, int start, int length, Map<String, Object> params) {
         Query query = this.entityManager.createNativeQuery(sql, this.entityClass);
         setParameter(query, params);
@@ -46,7 +45,7 @@ public class BasicRepositoryImpl<T, ID extends Serializable> extends SimpleJpaRe
         return query.getResultList();
     }
 
-	@Override
+    @Override
     public List<Map<String, Object>> queryListBySql(String sql, Map<String, Object> params) {
         Query query = this.entityManager.createNativeQuery(sql);
         if (params != null) {
@@ -56,7 +55,7 @@ public class BasicRepositoryImpl<T, ID extends Serializable> extends SimpleJpaRe
         return query.getResultList();
     }
 
-	@Override
+    @Override
     public List<Map<String, Object>> queryListBySql(String sql, int start, int length, Map<String, Object> params) {
         Query query = this.entityManager.createNativeQuery(sql);
         setParameter(query, params);
@@ -64,7 +63,7 @@ public class BasicRepositoryImpl<T, ID extends Serializable> extends SimpleJpaRe
         ((NativeQuery) query.unwrap(NativeQuery.class)).setResultTransformer(this.transformer);
         return query.getResultList();
     }
-    @Override
+/*    @Override
     public Long queryEntityListCountBySql(String sql, Map<String, Object> params) {
         Query query = this.entityManager.createNativeQuery(sql);
         setParameter(query, params);
@@ -73,7 +72,7 @@ public class BasicRepositoryImpl<T, ID extends Serializable> extends SimpleJpaRe
             return Long.valueOf(result.toString());
         }
         return Long.valueOf(0L);
-    }
+    }*/
     @Override
     public int executeSql(String sql, Map<String, Object> params) {
         Query query = this.entityManager.createNativeQuery(sql);

@@ -7,6 +7,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import com.madlyai.repository.test1.UserDao;
+import com.madlyai.repository.test2.UserDao2;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,8 +26,11 @@ public class SpringbootMultiDatasourceApplicationTests {
 	@Resource
 	private UserTest1Repository userTest1Repository;
 	@Resource
-	private UserTest2Repository userTest2Repository;	@Resource
+	private UserTest2Repository userTest2Repository;
+	@Resource
 	private UserDao userDao;
+	@Resource
+	private UserDao2 userDao2;
 
 	@Test
 	@Transactional(propagation=Propagation.REQUIRED)
@@ -38,21 +42,24 @@ public class SpringbootMultiDatasourceApplicationTests {
 		//userTest1Repository.save(new User("aa", "aa123456","aa@126.com", "aa",  formattedDate));
 		System.err.println("=============================");
 		//userTest2Repository.save(new User("cc", "cc123456","cc@126.com", "cc",  formattedDate));
-//		List<User> list=userTest1Repository.findAll();
-//		for (User user : list) {
-//			System.out.println(user);
-//		}
-//		for (User user : userTest2Repository.findAll()) {
-//			System.out.println("222"+user);
-//		}
-		for (User user : userDao.findAll()) {
+		List<User> list=userTest1Repository.findAll();
+		for (User user : list) {
+			System.out.println("111"+user);
+		}
+		for (User user : userTest2Repository.findAll()) {
 			System.out.println("222"+user);
+		}
+		for (User user : userDao.findAll()) {
+			System.out.println("333"+user);
+		}
+		for (User user : userDao2.findAll()) {
+			System.out.println("444"+user);
 		}
 		
 	}
 
-	@Test
+/*	@Test
 	public void contextLoads() {
-	}
+	}*/
 
 }
